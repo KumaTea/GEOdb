@@ -1,0 +1,43 @@
+[build-system]
+requires  =  ["setuptools"]
+build-backend  =  "setuptools.build_meta"
+
+[project]
+name = "GEOdb"
+version = "0.1.0"
+description = "An asynchronous Python library for the Gene Expression Omnibus (GEO) database"
+readme = {file = "README.md", content-type = "text/markdown"}
+requires-python = ">=3.8"
+license = {file = "LICENSE"}
+authors = [
+    {name = "KumaTea", email = "KumaTea@outlook.com"}
+]
+maintainers = [
+    {name = "KumaTea", email = "KumaTea@outlook.com"}
+]
+keywords = ["bioinformatics", "gene-expression-omnibus"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: Implementation",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development :: Libraries :: Python Modules"
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/KumaTea"
+Repository = "https://github.com/KumaTea/GEOdb"
