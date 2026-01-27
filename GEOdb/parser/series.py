@@ -9,7 +9,7 @@ def parse_item(item: str) -> GEOSeriesInfo:
     organism = ''
     series_type = ''
     platform = ''
-    samples = 0
+    samples_count = 0
     accession = ''
     series_id = 0
     ftp = None
@@ -18,7 +18,9 @@ def parse_item(item: str) -> GEOSeriesInfo:
     item_split = item.split('\n')
 
     title = item_split[0].split('.')[1].strip()
-    summary = item_split[1].strip()
+    summary_start = item.index('(Submitter supplied)') + len('(Submitter supplied)')
+    summary_end = item.index('Organism')
+    summary = item[summary_start:summary_end].strip()
 
     for line in item_split[2:]:
         if 'Organism' in line:
@@ -26,9 +28,11 @@ def parse_item(item: str) -> GEOSeriesInfo:
         elif 'Type' in line:
             series_type = line.split(':')[1].replace('\t', '').strip()
         elif 'Platform' in line:
-            if ':' in line:
-                platform = line.split(':')[1].strip().split(' ')[0].replace('\t', '').strip()
-            samples = int(line.split(' ')[-2].replace('\t', '').strip())
+            for kw in ['Platform:', 'Platforms:']:
+                if kw in line:
+                    platform = line.split(kw)[1].strip().split(' ')[0].replace('\t', '').strip()
+                    break
+            samples_count = int(line.split(' ')[-2].replace('\t', '').strip())
         elif 'FTP' in line:
             ftp = line.split(' ')[-1].replace('\t', '').strip()
         elif 'SRA' in line:
@@ -39,9 +43,9 @@ def parse_item(item: str) -> GEOSeriesInfo:
 
     link = f'{SERIES_DETAIL_URL}{accession}'
 
-    required_fields = [title, link, organism, series_type, platform, samples, summary, accession, series_id]
+    required_fields = [title, link, organism, series_type, platform, samples_count, summary, accession, series_id]
     required_field_names = [
-        'title', 'link', 'organism', 'series_type', 'platform', 'samples', 'summary', 'accession', 'series_id'
+        'title', 'link', 'organism', 'series_type', 'platform', 'samples_count', 'summary', 'accession', 'series_id'
     ]
     indices = [i for i, value in enumerate(required_fields) if not value]
     if indices:
@@ -54,7 +58,7 @@ def parse_item(item: str) -> GEOSeriesInfo:
         organism=organism,
         type=series_type,
         platform=platform,
-        samples=samples,
+        samples_count=samples_count,
         id=accession, accession=accession,
         series_id=series_id,
         ftp=ftp,
@@ -83,8 +87,11 @@ def parse_file(file: Union[str, TextIO]) -> list[GEOSeriesInfo]:
 def csv_writer_core(writer: csv.DictWriter, series: list[GEOSeriesInfo]):
     writer.writeheader()
     for item in series:
-        del item.url
-        del item.accession
+        try:
+            del item.url
+            del item.accession
+        except AttributeError:
+            pass
         # item.title = item.title.replace(',', '，').replace('"', "'")
         # item.summary = item.summary.replace(',', '，').replace('"', "'")
         # item_dict = item.__dict__
@@ -97,7 +104,7 @@ def csv_writer_core(writer: csv.DictWriter, series: list[GEOSeriesInfo]):
 
 
 def series_list_to_csv(series: list[GEOSeriesInfo], file: Union[str, TextIO]):
-    headers = ['title', 'link', 'summary', 'organism', 'type', 'platform', 'samples', 'id', 'series_id', 'ftp', 'sra']
+    headers = ['title', 'link', 'summary', 'organism', 'type', 'platform', 'samples_count', 'id', 'series_id', 'ftp', 'sra']
     if isinstance(file, str):
         with open(file, 'w', encoding='utf-8', newline='') as f:
             writer = csv.DictWriter(f, fieldnames=headers)

@@ -3,7 +3,7 @@ SERIES_URL = f'{NCBI_HOST}/gds/'
 SERIES_DETAIL_URL = f'{NCBI_HOST}/geo/query/acc.cgi?acc='
 
 
-chrome_ver = 124
+chrome_ver = 144
 USER_AGENT = (
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
     'AppleWebKit/537.36 (KHTML, like Gecko) '
