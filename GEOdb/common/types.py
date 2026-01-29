@@ -5,7 +5,7 @@ from dataclasses import dataclass
 @dataclass
 class GEOSample:
     title: str
-
+    id: str
     date: datetime
     status: datetime  # alias for date
     type: str  # sample type: SRA, etc.
@@ -65,7 +65,7 @@ class GEOSeriesInfo:
     status: datetime = None  # alias for date
     design: str = None
     contributors: list[str] = None
-    samples: list[GEOSample] = None
+    samples: dict[str, GEOSample] = None
     citation: str = None
     extra: GEOSeriesInfoExtra = None
     ftp: str = None
